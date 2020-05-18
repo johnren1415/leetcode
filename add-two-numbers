@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2){
+    struct ListNode *added_head,*added_temp;
+    added_head = (struct ListNode*)malloc(sizeof(struct ListNode));
+    int add_to_next=0, temp_sum=0;
+    added_head->val = (l1->val+l2->val)%10;
+    add_to_next = (l1->val+l2->val)/10;
+    added_temp=added_head;
+    struct ListNode *temp_l1=l1->next;
+    struct ListNode *temp_l2=l2->next;
+    while(temp_l1||temp_l2){
+        if(temp_l1!=NULL && temp_l2!=NULL){
+            added_temp->next=(struct ListNode*)malloc(sizeof(struct ListNode));
+            added_temp=added_temp->next;
+            temp_sum = temp_l1->val + temp_l2->val + add_to_next;
+            added_temp->val = temp_sum%10;
+            add_to_next = temp_sum/10;
+            temp_l1=temp_l1->next;
+            temp_l2=temp_l2->next;
+            }
+        else if(temp_l1==NULL && temp_l2!=NULL){
+            added_temp->next=(struct ListNode*)malloc(sizeof(struct ListNode));
+            added_temp=added_temp->next;
+            temp_sum = temp_l2->val + add_to_next;
+            added_temp->val = temp_sum%10;
+            add_to_next = temp_sum/10;
+            temp_l2=temp_l2->next;
+        }
+        else if(temp_l1!=NULL && temp_l2==NULL){
+            added_temp->next=(struct ListNode*)malloc(sizeof(struct ListNode));
+            added_temp=added_temp->next;
+            temp_sum = temp_l1->val + add_to_next;
+            added_temp->val = temp_sum%10;
+            add_to_next = temp_sum/10;
+            temp_l1=temp_l1->next; 
+        }
+    }
+    if(add_to_next){
+        added_temp->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+        added_temp->next->val=add_to_next;
+        added_temp->next->next=NULL;
+    }
+    else{
+        
+        added_temp->next=NULL;
+    }
+    return added_head;    
+}
