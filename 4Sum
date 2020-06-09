@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> solution;
+        for(int i=0; i!=nums.size(); i++)
+            for(int j=0; j!=nums.size()-1; j++)
+                if(j!=i){
+                    unordered_map<int, int> mp;
+                    for(int k=0; k!=nums.size()-2; k++)
+                        if(k!=i&&k!=j)
+                            mp[nums[k]]=k;
+                    for(int k=0; k!=nums.size()-2; k++)
+                        if(k!=i&&k!=j){
+                            auto found_it=mp.find(target-nums[i]-nums[j]-nums[k]);
+                            if(found_it!=mp.end() && found_it->second!=k){
+                                int l=found_it->second;
+                                vector<int> row{nums[i], nums[j], nums[k], nums[l]};
+                                sort(row.begin(), row.end());
+                                auto solution_it=solution.begin();
+                                for(solution_it=solution.begin(); solution_it!=solution.end()&&*solution_it!=row; solution_it++);
+                                if(solution_it==solution.end())
+                                    solution.push_back(row);
+                            }
+                        }       
+                }
+        return solution;
+    }
+};
