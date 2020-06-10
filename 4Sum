@@ -1,27 +1,36 @@
+
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
         vector<vector<int>> solution;
-         if(nums.size()<4)
+         if(nums.size()<4||nums[0]*4>target||nums[nums.size()-1]*4<target)
             return solution;
-        for(int i=0; i!=nums.size()-3; i++)
-            for(int j=i+1; j!=nums.size()-2; j++){
-                    unordered_map<int, int> mp;
-                    for(int k=j+1; k!=nums.size(); k++)
+        for(int i=0; i!=nums.size()-3; i++){
+            if(target<nums[i]*4)
+                break;
+            else
+                for(int j=i+1; j!=nums.size()-2; j++){
+                    if(target-nums[i]<nums[j]*3)
+                        break;
+                    else{
+                        unordered_map<int, int> mp;
+                        for(int k=j+1; k!=nums.size(); k++)
                             mp[nums[k]]=k;
-                    for(int k=j+1; k!=nums.size(); k++){
+                        for(int k=j+1; k!=nums.size(); k++){
                             auto found_it=mp.find(target-nums[i]-nums[j]-nums[k]);
                             if(found_it!=mp.end() && found_it->second!=k){
                                 int l=found_it->second;
-                                vector<int> row{nums[i], nums[j], nums[k], nums[l]};
-                                sort(row.begin(), row.end());
+                                vector<int> row{nums[i], nums[j], min(nums[k], nums[l]), max(nums[k], nums[l])};
                                 auto solution_it=solution.begin();
                                 for(solution_it=solution.begin(); solution_it!=solution.end()&&*solution_it!=row; solution_it++);
                                 if(solution_it==solution.end())
                                     solution.push_back(row);
                             }
-                    }       
-            }
+                        } 
+                    }
+                }
+        }
         return solution;
     }
 };
