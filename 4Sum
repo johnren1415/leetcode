@@ -14,19 +14,22 @@ public:
                     if(target-nums[i]<nums[j]*3)
                         break;
                     else{
-                        unordered_map<int, int> mp;
-                        for(int k=j+1; k!=nums.size(); k++)
-                            mp[nums[k]]=k;
-                        for(int k=j+1; k!=nums.size(); k++){
-                            auto found_it=mp.find(target-nums[i]-nums[j]-nums[k]);
-                            if(found_it!=mp.end() && found_it->second!=k){
-                                int l=found_it->second;
-                                vector<int> row{nums[i], nums[j], min(nums[k], nums[l]), max(nums[k], nums[l])};
+                        int lo=j+1, hi=nums.size()-1;
+                        while(lo<hi){
+                            int sum=nums[lo]+nums[hi];
+                            if(sum<target-nums[i]-nums[j]||nums[lo+1]==nums[lo]&&sum<target-nums[i]-nums[j])
+                                lo++;
+                            else if(sum>target-nums[i]-nums[j]||nums[hi-1]==nums[hi]&&sum>target-nums[i]-nums[j])
+                                hi--;
+                            else{
+                                vector<int> row{nums[i], nums[j], nums[lo], nums[hi]};
                                 auto solution_it=solution.begin();
                                 for(solution_it=solution.begin(); solution_it!=solution.end()&&*solution_it!=row; solution_it++);
                                 if(solution_it==solution.end())
                                     solution.push_back(row);
-                            }
+                                lo++;
+                                hi--;
+                            }    
                         } 
                     }
                 }
@@ -34,3 +37,4 @@ public:
         return solution;
     }
 };
+
