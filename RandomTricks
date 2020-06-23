@@ -1,0 +1,7 @@
+1. sort a vector<pair<int, int>> instead of map<int, int>.
+std::vector<std::pair<int,int>> cnts(n);
+std::sort(cnts.begin(), cnts.end(), [](auto &l, auto &r) {
+                if(l.first!=r.first)
+                    return l.first < r.first;
+                return l.second < r.second;
+            });
